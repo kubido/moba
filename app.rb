@@ -13,7 +13,7 @@ class App < Sinatra::Base
 
   post '/hooks/github' do 
     content_type :json
-    org_name = @req_body["github_username"] || 'rmt-15-oslo-fox'
+    org_name = @req_body["github_username"] || ENV["DEFAULT_GITHUB_ORG"]
     resp_cache = @redis.get(org_name)
     if resp_cache
       repos = JSON.parse resp_cache
