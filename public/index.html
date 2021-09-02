@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+
+  <script src="//unpkg.com/alpinejs" defer></script>
+
+  <title>Git Commit</title>
+</head>
+
+<body @hashchange.window="pageChangeHandler" x-data="init">
+
+  <div class="container">
+    <nav class="navbar navbar-light bg-light">
+      <a href="#"><span class="navbar-brand mb-0 h1" x-text="title"></span></a>
+      <a href="#manage">Manage</a>
+
+    </nav>
+
+    <div class="row mt-4">
+      <div class="col">
+        <template x-for="alert in alerts">
+          <div x-bind:class="`alert alert-${alert.status}`" role="alert">
+            <span x-text="alert.message"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="alerts=[]">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </template>
+
+        <section x-show="page === '#manage'">
+          <form x-on:submit="saveGroup">
+            <div class="form-group">
+              <label>Batch Name</label>
+              <input type="text" x-model="form.name" class="form-control" placeholder="Batch Name">
+              <small class="form-text text-muted">contoh: RMT-15-OSLO-FOX</small>
+            </div>
+            <div class="form-group">
+              <label>List users</label>
+              <textarea name="" x-model="form.text" class="form-control" id="" cols="100" rows="10"
+                x-on:change="pasteHandler"></textarea>
+              <small class="form-text text-muted">masuk ke googlesheets phase 2 > sheets final notes > select dari nama
+                B4 - UsernameGithub terakhir</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </section>
+
+        <section x-show="page === ''">
+          <select class="custom-select" x-model="selectedCohort" @change="cohortSelectHandler">
+            <option selected>Choose...</option>
+            <template x-for="cohortName in cohorts">
+              <option :value="cohortName" x-text="cohortName"></option>
+            </template>
+
+          </select>
+          <table class="table mt-4">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Status</th>
+                <th scope="col">Email</th>
+                <th scope="col">Nyawa</th>
+                <th scope="col">Github</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="(user, index) in users">
+
+                <tr>
+                  <th scope="row" x-text="index+1"></th>
+                  <th x-text="user[0]"></th>
+                  <th x-text="user[1]"></th>
+                  <th x-text="user[2]"></th>
+                  <th x-text="user[3]"></th>
+                  <th x-text="user[4]"></th>
+                  <th>
+                    <a :href="`#github_${user[4]}`" class="btn btn-info">Commit</a>
+                  </th>
+
+                </tr>
+              </template>
+
+            </tbody>
+          </table>
+          <span x-show="users.length < 1" class="d-block text-center"> Please select group</span>
+        </section>
+        <section x-show="page.includes('github_')">
+          <h2 x-text='`Commit Activity - ${location.hash.split("_")[1]}`'></h2>
+        </section>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script>
+  const DATA_KEY = "h8cohorts"
+
+  function init() {
+    let cohorts = localStorage[DATA_KEY] || "{}"
+    cohorts = JSON.parse(cohorts)
+
+    return {
+      selectedCohort: null,
+      users: [],
+      alerts: [],
+      cohorts: Object.keys(cohorts),
+      dropdown: false,
+      title: "GCH - Git Commit History",
+      page: location.hash,
+      form: {
+        name: '',
+        text: ''
+      },
+      getGroups() {
+        let cohorts = localStorage[DATA_KEY]
+        cohorts = JSON.parse(cohorts)
+        return Object.keys(cohorts)
+      },
+      cohortSelectHandler(event) {
+        let cohorts = localStorage[DATA_KEY] || "{}"
+        cohorts = JSON.parse(cohorts)
+        this.users = cohorts[this.selectedCohort]
+      },
+      pasteHandler(event) {
+        let text = event.target.value
+        let rows = text.split('\n').map(row => {
+          return row.split('\t')
+        })
+        this.users = rows
+      },
+      pageChangeHandler(event) {
+        this.page = location.hash
+      },
+      saveGroup() {
+        try {
+          let cohorts = localStorage[DATA_KEY] || "{}"
+          cohorts = JSON.parse(cohorts)
+          cohorts[this.form.name] = this.users
+          localStorage.setItem(DATA_KEY, JSON.stringify(cohorts))
+          this.cohorts = Object.keys(cohorts)
+          this.alerts.push({ status: 'success', message: 'Successfully add' })
+        } catch (error) {
+          this.alerts.push({ status: 'danger', message: error.message })
+        }
+        setTimeout(() => {
+          this.alert = []
+        }, 2000);
+      }
+    }
+  }
+</script>
+
+
+</html>
