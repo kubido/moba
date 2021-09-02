@@ -3,6 +3,7 @@ GEM
   specs:
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    colorize (0.8.1)
     dotenv (2.7.6)
     faraday (1.7.1)
       faraday-em_http (~> 1.0)
@@ -49,6 +50,7 @@ PLATFORMS
   x86_64-darwin-19
 
 DEPENDENCIES
+  colorize
   dotenv
   octokit (~> 4.0)
   redis
