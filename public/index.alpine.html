@@ -53,14 +53,53 @@
         </section>
 
         <section x-show="page === ''">
-          <select class="custom-select" x-model="selectedCohort" @change="cohortSelectHandler">
+          <select class="custom-select" x-model="selectedRepo" x-init="fetchRepoCommits" @change="selectRepoHandler">
             <option selected>Choose...</option>
-            <template x-for="cohortName in cohorts">
-              <option :value="cohortName" x-text="cohortName"></option>
+            <template x-for="repo in Object.keys(repos)">
+              <option :value="repo" x-text="repo"></option>
             </template>
 
           </select>
-          <table class="table mt-4">
+          <div class="row mt-4">
+            <table class="table mt-4">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col" @click="sort('selectedRepoBranches', 'branch_name')">
+                    <div class="d-flex align-items-center">
+                      Name
+                      <div class="arrow-up ml-3" x-show="sortSelected == 'branch_name' && sortDirection == 1"></div>
+                      <div class="arrow-down ml-3" x-show="sortSelected == 'branch_name' && sortDirection == -1"></div>
+                    </div>
+
+                  </th>
+                  <th scope=" col" @click="sort('selectedRepoBranches', 'commits')">
+                    <div class="d-flex align-items-center">
+                      Jumlah Commit
+                      <div class="arrow-up ml-3" x-show="sortSelected == 'commits' && sortDirection == 1"></div>
+                      <div class="arrow-down ml-3" x-show="sortSelected == 'commits' && sortDirection == -1"></div>
+                    </div>
+                  </th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-for="(branch, index) in selectedRepoBranches ">
+                  <tr>
+                    <td scope="row" x-text="index+1"></td>
+                    <td x-text="branch.branch_name"></td>
+                    <td x-text="branch.commits.length"></td>
+                    <td>
+                      <div style="cursor: pointer" class="btn btn-info text-white pointer">
+                        compare</div>
+                    </td>
+
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+          <!-- <table class="table mt-4">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -90,8 +129,8 @@
               </template>
 
             </tbody>
-          </table>
-          <span x-show="users.length < 1" class="d-block text-center"> Please select group</span>
+          </table> -->
+          <span x-show="selectedRepoBranches.length < 1" class="d-block text-center"> Please select repo</span>
         </section>
         <section x-show="page.includes('github_')">
           <h2 x-text='`Commit Activity - ${location.hash.split("_")[1]}`'></h2>
@@ -109,9 +148,14 @@
     cohorts = JSON.parse(cohorts)
 
     return {
-      selectedCohort: null,
+      base_url: "http://localhost:9292",
+      sortDirection: 1,
+      sortSelected: null,
       users: [],
       alerts: [],
+      repos: {},
+      selectedRepo: null,
+      selectedRepoBranches: [],
       cohorts: Object.keys(cohorts),
       dropdown: false,
       title: "GCH - Git Commit History",
@@ -120,15 +164,41 @@
         name: '',
         text: ''
       },
+      selectRepoHandler() {
+        this.selectedRepoBranches = this.repos[this.selectedRepo]
+      },
+      sort(data, key) {
+        console.log(this.sortDirection);
+        this[data] = this[data].sort((b, a) => {
+          if (key === "commits") {
+            return a[key].length < b[key].length ? -this.sortDirection : this.sortDirection
+          } else {
+            return a[key] < b[key] ? -this.sortDirection : this.sortDirection
+          }
+        })
+        this.sortDirection = -this.sortDirection
+        this.sortSelected = key
+
+      },
+      fetchRepoCommits() {
+        let url = this.base_url + '/hooks/github'
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify({ cache: true })
+        })
+          .then(resp => resp.json())
+          .then(data => {
+            this.repos = data
+          })
+
+      },
       getGroups() {
         let cohorts = localStorage[DATA_KEY]
         cohorts = JSON.parse(cohorts)
         return Object.keys(cohorts)
       },
       cohortSelectHandler(event) {
-        let cohorts = localStorage[DATA_KEY] || "{}"
-        cohorts = JSON.parse(cohorts)
-        this.users = cohorts[this.selectedCohort]
+
       },
       pasteHandler(event) {
         let text = event.target.value
@@ -158,6 +228,24 @@
     }
   }
 </script>
+<style>
+  .arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
 
+    border-bottom: 5px solid black;
+  }
+
+  .arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+
+    border-top: 5px solid black;
+  }
+</style>
 
 </html>

@@ -1,11 +1,9 @@
-require 'sinatra'
-require 'octokit'
+require 'bundler'
 require 'json'
-require "redis"
 require 'dotenv/load'
 require 'colorize'
 
-
+Bundler.require
 require './app'
 
 run App
