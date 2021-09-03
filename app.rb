@@ -9,11 +9,11 @@ class App < Sinatra::Base
 
   after do 
     response.headers['Access-Control-Allow-Origin'] = '*'
-
   end
 
   get '/' do
-    File.read(File.join('public', "index.alpine.html"))
+    api_url = ENV['APP_ENV'] === "production" ?  ENV['API_URL_PROD'] : ENV['API_URL_DEV']
+    erb :index, locals: {api_url: api_url}
   end
 
   post '/hooks/github' do 

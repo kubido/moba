@@ -24,6 +24,7 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
+    foreman (0.87.2)
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
@@ -53,6 +54,7 @@ PLATFORMS
 DEPENDENCIES
   colorize
   dotenv
+  foreman
   octokit (~> 4.0)
   redis
   sinatra
