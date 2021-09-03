@@ -45,15 +45,24 @@
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </section>
-          <section x-show="page === ''">
-            <select class="custom-select" x-model="selectedRepo" x-init="fetchRepoCommits" @change="selectRepoHandler">
-              <option selected x-text="repos.length < 1  ? 'Loading..' : 'Choose'"></option>
-              <template x-for="repo in Object.keys(repos)">
-                <option :value="repo" x-text="repo"></option>
-              </template>
-            </select>
-            <div x-show="repos.length">
-              <div @click="displayCalendar" class="btn btn-info mt-4" x-text="`Toggle view`"></div>
+          <section x-show="page === ''" x-init="fetchRepoCommits">
+            <div x-show="Object.keys(repos).length < 1">
+              <img src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" alt="" srcset="" width="75" height="75" class="d-block m-auto">
+            </div>
+            <div x-show="Object.keys(repos).length > 0" >
+              <div class="row">
+                <div class="col-md-10">
+                  <select class="custom-select" x-model="selectedRepo"  @change="selectRepoHandler">
+                    <option selected >Choose...</option>
+                    <template x-for="repo in Object.keys(repos)">
+                      <option :value="repo" x-text="repo"></option>
+                    </template>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <div @click="displayCalendar" class="btn btn-info" x-text="`Toggle view`"></div>
+                </div>
+              </div>
               <div x-show="viewType === 'timeline'" id='calendar' class="mt-4"></div>
               <div class="row mt-4">
                 <table x-show="viewType === 'table'" class="table mt-4">
@@ -84,8 +93,8 @@
                         <td x-text="branch.branch_name"></td>
                         <td x-text="branch.commits.length"></td>
                         <td>
-                          <div style="cursor: pointer" class="btn btn-info text-white pointer">
-                            Compare</div>
+                          <!--<div style="cursor: pointer" class="btn btn-info text-white pointer">
+                            Compare</div> -->
                           <div style="cursor: pointer" class="btn btn-info text-white pointer" @click="selectBranchHandler(branch.branch_name)">
                             View</div>
                         </td>
@@ -95,7 +104,7 @@
                 </table>
               </div>
               <div class="d-block text-center">
-                <span x-show="selectedRepoBranches.length < 1"> Please select repo</span>
+                <span x-show="selectedRepoBranches.length < 1"> Please select a repo</span>
               </div>
             </div>
           </section>
