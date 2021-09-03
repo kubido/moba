@@ -3,7 +3,7 @@ include Github
 
 class App < Sinatra::Base
   before do 
-    @redis = Redis.new
+    @redis = Redis.new(url: ENV["REDIS_URL"])
     @req_body = JSON.parse request.body.read rescue {}
   end
 
