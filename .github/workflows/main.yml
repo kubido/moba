@@ -3,7 +3,7 @@ jobs:
   curl:
     runs-on: ubuntu-latest
     steps:
-    - name: curl
-      uses: wei/curl@v1
-      with:
-        args: -X POST https://gh-branch-commits.rifkifauzi.id  --data "{'cache':'true'}" -H "Content-type:application/json"
+      - name: curl
+        uses: wei/curl@v1
+        with:
+          args: -X POST https://daily-commit-rb.herokuapp.com/hooks/github
