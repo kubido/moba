@@ -19,7 +19,6 @@ module Github
   def repo_commits(repo_name, branch_name=nil)
     commits = []
     user_commits = client.commits(repo_name, branch_name, {per_page: 100})
-    puts "#{branch_name} #{user_commits.count}"
     user_commits.each do |git_commit|
       commit = git_commit.commit.to_hash
       commits << {
@@ -27,7 +26,8 @@ module Github
         author: commit[:author],
         commiter: commit[:committer],
         tree: commit[:tree],
-        url: commit[:url],
+        url: commit[:html_url],
+        api_url: commit[:url],
         comment_count: commit[:comment_count]
       }
     end
