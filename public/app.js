@@ -1,6 +1,6 @@
 const DATA_KEY = "h8cohorts"
 
-function init(api_url) {
+export function init(api_url) {
   let cohorts = localStorage[DATA_KEY] || "{}"
   cohorts = JSON.parse(cohorts)
 

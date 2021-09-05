@@ -1,3 +1,5 @@
 .env
 .bundle
 dump.rdb
+.cache
+*.dev.*
