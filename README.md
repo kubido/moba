@@ -11,3 +11,7 @@ You need to install these dependencies in your environment
 - run `bundle install`
 - run `bundle exec foreman start -f Procfile.dev`
 - server will be run at port `3000` and parcel at port `3100` (you can change it in `Procfile.dev`)
+
+## DEMO
+
+[working demo](https://daily-commit-rb.herokuapp.com/)
