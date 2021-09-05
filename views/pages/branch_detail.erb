@@ -7,7 +7,8 @@
           <td x-text="idx+1" class="mr-1"></td>
           <td x-text="formatDate(commit.author.date)" class="mr-2"></td>
           <td>
-            <a target="_blank" :href="commit.api_url.replace(/api\.|git\/|repos\//g, '').replace('commits', 'commit')" x-text="commit.message"></a>
+            <a target="_blank" class="text-muted" :href="`https://github.com/${commit.author.name}`" x-text="commit.author.name"></a>: 
+            <a target="_blank" class="text-info" :href="commit.api_url.replace(/api\.|git\/|repos\//g, '').replace('commits', 'commit')" x-text="commit.message"></a>
           </td>
         </tr>
       </template >
