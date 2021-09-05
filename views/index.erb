@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <%= erb 'partials/html_head'.to_sym %>
-  <body @hashchange.window="pageChangeHandler" x-data="app.init('<%= api_url %>')">
+  <body @hashchange.window="pageChangeHandler" x-data="init('<%= api_url %>')">
     <div class="container">
       <%= erb 'partials/navbar'.to_sym %>
       <div class="row mt-4">

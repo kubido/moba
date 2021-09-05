@@ -1,2 +1,2 @@
 web: APP_ENV=development bundle exec rackup config.ru -p 3000
-client: parcel serve ./public/app.js --port 3100 --out-dir ./public --public-url ./public --cache-dir ./public/.cache --out-file app.dev.js   --global app
+client: parcel serve ./public/app.js --port 3100 --out-dir ./public --public-url ./ --cache-dir ./public/.cache --out-file app.dev.js 
