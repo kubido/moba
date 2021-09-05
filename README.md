@@ -2,7 +2,7 @@
 
 You need to install these dependencies in your environment
 
-- `ruby 2.5.1`
+- `ruby 2.5.1` above
 - `bundler` (`gem install bundler`)
 - `parcelcli` (`npm i -g parcel-bundler`)
 
