@@ -1,0 +1,8 @@
+  <template x-for="alert in alerts">
+  <div x-bind:class="`alert alert-${alert.status}`" role="alert">
+    <span x-text="alert.message"></span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="alerts=[]">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</template>

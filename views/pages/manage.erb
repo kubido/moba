@@ -1,0 +1,18 @@
+ 
+<section x-show="page === '#manage'">
+  <form x-on:submit="saveGroup">
+    <div class="form-group">
+      <label>Batch Name</label>
+      <input type="text" x-model="form.name" class="form-control" placeholder="Batch Name">
+      <small class="form-text text-muted">contoh: RMT-15-OSLO-FOX</small>
+    </div>
+    <div class="form-group">
+      <label>List users</label>
+      <textarea name="" x-model="form.text" class="form-control" id="" cols="100" rows="10"
+                x-on:change="pasteHandler"></textarea>
+      <small class="form-text text-muted">masuk ke googlesheets phase 2 > sheets final notes > select dari nama
+        B4 - UsernameGithub terakhir</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</section>

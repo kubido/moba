@@ -1,0 +1,16 @@
+<section x-show="page.includes('branch_')">
+  <h2 x-text='`Commit Activity - ${branchDetail.branch_name}`'></h2>
+  <table class="table">
+    <tbody>
+      <template x-for="(commit, idx) in branchDetail.commits">
+        <tr>
+          <td x-text="idx+1" class="mr-1"></td>
+          <td x-text="formatDate(commit.author.date)" class="mr-2"></td>
+          <td>
+            <a target="_blank" :href="commit.api_url.replace(/api\.|git\/|repos\//g, '').replace('commits', 'commit')" x-text="commit.message"></a>
+          </td>
+        </tr>
+      </template >
+    </tbody>
+  </table>
+</section>

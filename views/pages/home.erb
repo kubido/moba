@@ -1,0 +1,64 @@
+ 
+<section x-show="page === ''" x-init="fetchRepoCommits">
+  <div x-show="Object.keys(repos).length < 1">
+    <img src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" alt="" srcset="" width="75" height="75" class="d-block m-auto">
+  </div>
+  <div x-show="Object.keys(repos).length > 0" >
+    <div class="row">
+      <div class="col-md-10">
+        <select class="custom-select" x-model="selectedRepo"  @change="selectRepoHandler">
+          <option selected >Choose...</option>
+          <template x-for="repo in Object.keys(repos)">
+            <option :value="repo" x-text="repo"></option>
+          </template>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <div @click="displayCalendar" class="btn btn-info" x-text="`Toggle view`"></div>
+      </div>
+    </div>
+    <div x-show="viewType === 'timeline'" id='calendar' class="mt-4"></div>
+    <div class="row mt-4">
+      <table x-show="viewType === 'table'" class="table mt-4">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" @click="sort('selectedRepoBranches', 'branch_name')">
+              <div class="d-flex align-items-center">
+                Name
+                <div class="arrow-up ml-3" x-show="sortSelected == 'branch_name' && sortDirection == 1"></div>
+                <div class="arrow-down ml-3" x-show="sortSelected == 'branch_name' && sortDirection == -1"></div>
+              </div>
+            </th>
+            <th scope=" col" @click="sort('selectedRepoBranches', 'commits')">
+              <div class="d-flex align-items-center">
+                Jumlah Commit
+                <div class="arrow-up ml-3" x-show="sortSelected == 'commits' && sortDirection == 1"></div>
+                <div class="arrow-down ml-3" x-show="sortSelected == 'commits' && sortDirection == -1"></div>
+              </div>
+            </th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="(branch, index) in selectedRepoBranches ">
+            <tr>
+              <td scope="row" x-text="index+1"></td>
+              <td x-text="branch.branch_name"></td>
+              <td x-text="branch.commits.length"></td>
+              <td>
+                <!--<div style="cursor: pointer" class="btn btn-info text-white pointer">
+                            Compare</div> -->
+                <div style="cursor: pointer" class="btn btn-info text-white pointer" @click="selectBranchHandler(branch.branch_name)">
+                  View</div>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-block text-center">
+      <span x-show="selectedRepoBranches.length < 1"> Please select a repo</span>
+    </div>
+  </div>
+</section>

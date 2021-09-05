@@ -3,6 +3,11 @@ source "https://rubygems.org"
 gem "octokit", "~> 4.0"
 gem 'sinatra'
 gem 'redis'
+gem 'json'
 gem 'colorize'
-gem 'dotenv', groups: [:development, :test]
-gem 'foreman', groups: [:development, :test]
+
+group :test, :development do
+  gem 'dotenv'
+  gem 'foreman'
+  gem 'rerun'
+end
