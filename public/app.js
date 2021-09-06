@@ -12,7 +12,9 @@ window.init = function init(api_url) {
     users: [],
     alerts: [],
     repos: {},
-    branchDetail: {},
+    branchDetail: {
+      commitDays: {}
+    },
     selectedRepo: null,
     selectedRepoBranches: [],
     cohorts: Object.keys(cohorts),
@@ -88,6 +90,17 @@ window.init = function init(api_url) {
     },
     selectBranchHandler(branchName) {
       this.branchDetail = this.selectedRepoBranches.filter(branch => branch.branch_name === branchName)[0]
+      let commitDays = {}
+      this.branchDetail.commits.forEach(commit => {
+        let date = commit.author.date.split(" ")[0]
+        if (commitDays[date]) {
+          commitDays[date].push(commit)
+        } else {
+          commitDays[date] = [commit]
+        }
+      })
+
+      this.branchDetail.commitDays = commitDays
 
       location.hash = "branch_" + this.branchDetail.branch_name
     },

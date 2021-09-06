@@ -1,17 +1,22 @@
 <section x-show="page.includes('branch_')">
-  <h2 x-text='`Commit Activity - ${branchDetail.branch_name}`'></h2>
-  <table class="table">
-    <tbody>
-      <template x-for="(commit, idx) in branchDetail.commits">
-        <tr>
-          <td x-text="idx+1" class="mr-1"></td>
-          <td x-text="formatDate(commit.author.date)" class="mr-2"></td>
-          <td>
-            <a target="_blank" class="text-muted" :href="`https://github.com/${commit.author.name}`" x-text="commit.author.name"></a>: 
-            <a target="_blank" class="text-info" :href="commit.api_url.replace(/api\.|git\/|repos\//g, '').replace('commits', 'commit')" x-text="commit.message"></a>
-          </td>
-        </tr>
-      </template >
-    </tbody>
-  </table>
+  <h2 class="mb-4" x-text='`Commit Activity - ${branchDetail.branch_name}`'></h2>
+  <template x-for="day in Object.keys(branchDetail.commitDays)">
+    <div class="my-4">
+      <h3 x-text="day"></h3>
+      <table class="table">
+        <tbody>
+          <template x-for="(commit, idx) in branchDetail.commitDays[day]">
+            <tr>
+              <th scope="row" x-text="idx+1" style="width: 50px;"></th>
+              <td x-text="formatDate(commit.author.date)" style="width: 360px;" ></td>
+              <td>
+                <a target="_blank" class="text-muted" :href="`https://github.com/${commit.author.name}`" x-text="commit.author.name"></a>: 
+                <a target="_blank" class="text-info" :href="commit.api_url.replace(/api\.|git\/|repos\//g, '').replace('commits', 'commit')" x-text="commit.message"></a>
+              </td>
+            </tr>
+          </template >
+        </tbody>
+      </table>
+    </div>
+  </template >
 </section>
